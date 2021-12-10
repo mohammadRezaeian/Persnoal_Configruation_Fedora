@@ -90,7 +90,7 @@ echo "change shell"
 echo -e "$myPass" |  sudo -kS  chsh --shell /bin/zsh $(whoami)
 
 echo "finish"
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sh -c "$(curl -fssl https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended"
 #reboot
 #echo "Reboot"
 echo -e "$myPass" | sudo -kS reboot
