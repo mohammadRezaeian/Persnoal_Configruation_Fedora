@@ -78,6 +78,9 @@ forward           localhost/     .
 EOF"
 
 
+# protected Package 
+echo -e "$myPass" | sudo -kS sh -c "dnf list --installed | awk {'print $1'} >> /etc/dnf/protected.d/default-pkgs.conf"
+
 
 #run firejail for default all program
 echo -e "$myPass" |  sudo -kS firecfg
