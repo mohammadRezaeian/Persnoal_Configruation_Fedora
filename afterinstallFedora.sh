@@ -170,7 +170,6 @@ chromium
 
 
 # install package flatpak
-
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 flatpak install flathub com.vscodium.codium -y
@@ -196,6 +195,7 @@ sudo sed -i 's/countme=1/countme=0/g' /etc/yum.repos.d/*
 echo -e "$myPass" |  sudo -kS systemctl enable  --now dnscrypt-proxy
 echo -e "$myPass" |  sudo -kS systemctl enable  --now tor@obfs4.service
 echo -e "$myPass" |  sudo -kS systemctl enable  --now libvirtd
+echo -e "$myPass" |  sudo -kS systemctl enable  --now libvirtd.socket
 
 echo -e "$myPass" |  sudo -kS systemctl disable --now cups.service
 echo -e "$myPass" |  sudo -kS systemctl disable --now packagekit.service
