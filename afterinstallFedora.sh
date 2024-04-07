@@ -1,41 +1,43 @@
 #!/usr/bin/env bash
 
+set -x
+
+checkPassword=0
+
 # Function Check Password
 functionCheckPassword()
 {
-while [ $checkPassword == true ];
+while [ $checkPassword -eq 0 ]
 do
     echo "Please enter password sudo:"
     read -s myPass
     echo "Check Password"
+
     # Check Password
-    if echo -e "$myPass" |  sudo -kS true "$USER" ; then
-        clear
-        checkPassword=false
-    echo "wrtie true password"
+    if echo -e "$myPass" | sudo -kS true  "$USER" ; then
+        # clear
+        checkPassword=1
+    echo "Your Password is true"
     else
-        clear
+        # clear
         echo "Please write true password"
     fi
 done
 }
 
-
-myPass="password"
+myPass="EMPTY"
 
 # Run Function Check Password
 functionCheckPassword
 
+echo $myPass
 
-#install rpmfusion
+# #install rpmfusion
 echo -e "$myPass" |  sudo -kS dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
 
-#install librewolf
-echo -e "$myPass" |  sudo -kS rpm --import https://keys.openpgp.org/vks/v1/by-fingerprint/034F7776EF5E0C613D2F7934D29FBD5F93C0CFC3
-echo -e "$myPass" |  sudo -kS dnf config-manager --add-repo https://rpm.librewolf.net
 echo -e "$myPass" |  sudo -kS sed "s|=\$basearch$|=\$basearch\&country=CA,US,DE,FR,NL,BG|" /etc/yum.repos.d/* -i
 
-#update
+# #update
 echo -e "$myPass" |  sudo -kS dnf -y update
 
 # installation software
@@ -56,7 +58,6 @@ kalarm \
 mpv \
 nyx \
 thunderbird \
-chromium-freeworld \
 torbrowser-launcher \
 keepassx \
 qt-creator \
@@ -78,7 +79,6 @@ gdb \
 screenfetch \
 neofetch \
 nmon  \
-pavucontrol-qt \
 latte-dock \
 bat \
 youtube-dl \
@@ -117,18 +117,9 @@ obfs4 \
 proxychains-ng  \
 qbittorrent \
 python3-dnf-plugin-torproxy  \
-emacs \
 okular  \
 wireguard-tools \
-cantata  \
 texstudio  \
-java-1.8.0-openjdk-devel \
-java-1.8.0-openjdk \
-onionshare \
-arm-image-installer  \
-gajim  \
-unixODBC-devel  \
-qt-odbc  \
 unar  \
 rpmrebuild  \
 cmake  \
@@ -137,39 +128,11 @@ mediawriter  \
 screen  \
 python3-dnf-plugin-torproxy  \
 openvpn  \
-obs-studio \  
-texlive-xepersian.noarch  \
-WoeUSB  \
-texlive-newtx  \
-texlive-libertine  \
-texlive-everypage  \
-texlive-hyphenat.noarch   \
-texlive-lipsum.noarch  \
-texlive-moderncv.noarch  \
-texlive-xcharter.noarch  \
-python3-crypto python3-protobuf \
-python3-devel  \
-python3-qrcode  \
-mpd  \
-ksysguard  \
-kf5-kio  \
-kf5-kio-core   \
-adb  \
-librewolf  \
-umbrello  \
-vagrnat-libvirt \
-flatpak \
-rofi \
-sway \
-waybar
-
-echo -e "$myPass" |  sudo -kS dnf remove \
--y \
-totem \
-chromium 
+obs-studio \
+flatpak
 
 
-# install package flatpak
+# # install package flatpak
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 flatpak install flathub com.vscodium.codium -y
@@ -191,7 +154,7 @@ sudo sed -i 's/enabled=1/enabled=0/g' /etc/yum.repos.d/fedora-cisco-openh264.rep
 sudo sed -i 's/countme=1/countme=0/g' /etc/yum.repos.d/*
 
 
-#command for systemd
+# #command for systemd
 echo -e "$myPass" |  sudo -kS systemctl enable  --now dnscrypt-proxy
 echo -e "$myPass" |  sudo -kS systemctl enable  --now tor@obfs4.service
 echo -e "$myPass" |  sudo -kS systemctl enable  --now libvirtd
@@ -201,25 +164,27 @@ echo -e "$myPass" |  sudo -kS systemctl disable --now cups.service
 echo -e "$myPass" |  sudo -kS systemctl disable --now packagekit.service
 echo -e "$myPass" |  sudo -kS systemctl disable --now dnf-makecache.timer
 
-echo "write change bridge"
+# echo "write change bridge"
 
-#disable all bridge into file obfs4
-# echo -e "$myPass" |sudo -kS sed -i 's/^Bridge/#Bridge/g' /etc/tor/obfs4.torrc
-# echo "write bridge"
-# #write bridge to torrc
-# echo -e "$myPass" |  sudo -kS sh -c "cat >> /etc/tor/obfs4.torrc <<EOF
-# #bridge me
-# Bridge obfs4 65.21.5.133:8904 09AB8D2A95A7F9A1109DFA2301ED64296434756B cert=ZEasbyrXr0wzT2YmU5VCN7R9gt1jiESA/0TvCGDricGUJH7nn9Sj+r/lTNUEdcMAJAKDWw iat-mode=1
-# ExitNodes {us}
-# #HTTPTunnelPort 127.0.0.1:9051
-# #DNSPort 127.0.0.10:53
-# #AutomapHostsOnResolve 1
-# #AutomapHostsSuffixes .exit,.onion
-# EOF"
+# disable all bridge into file obfs4
+echo -e "$myPass" |sudo -kS sed -i 's/^Bridge/#Bridge/g' /etc/tor/obfs4.torrc
+
+echo "write bridge"
+
+#write bridge to torrc
+echo -e "$myPass" |  sudo -kS sh -c "cat >> /etc/tor/obfs4.torrc <<EOF
+#bridge me
+Bridge obfs4 65.21.5.133:8904 09AB8D2A95A7F9A1109DFA2301ED64296434756B cert=ZEasbyrXr0wzT2YmU5VCN7R9gt1jiESA/0TvCGDricGUJH7nn9Sj+r/lTNUEdcMAJAKDWw iat-mode=1
+ExitNodes {us}
+#HTTPTunnelPort 127.0.0.1:9051
+#DNSPort 127.0.0.10:53
+#AutomapHostsOnResolve 1
+#AutomapHostsSuffixes .exit,.onion
+EOF"
 
 echo -e "$myPass" |  sudo -kS systemctl restart tor@obfs4.service
 
-#enable privoxy
+# #enable privoxy
 echo -e "$myPass" | sudo -kS systemctl enable --now privoxy
 
 
@@ -229,13 +194,13 @@ echo -e "$myPass" |  sudo -kS crontab rkhunberNew
 echo -e "$myPass" |  sudo -kS rm rkhunberNew
 
 
-#install tor browser
+# #install tor browser
 torsocks torbrowser-launcher https://tor.eff.org/dist/
 
-#enable proxychains
+# #enable proxychains
 echo -e "$myPass" | sudo -kS sed -i 's/^socks4/socks5/g' /etc/proxychains.conf
 
-#add option into privoxy
+# #add option into privoxy
 echo -e "$myPass" | sudo -kS sh -c "cat >> /etc/privoxy/config <<EOF
 forward-socks5 / 127.0.0.1:9050  .
 forward-socks4a / 127.0.0.1:9050 .
@@ -246,13 +211,13 @@ forward           127.*.*.*/     .
 forward           localhost/     .
 EOF"
 
-# protected Package 
+# # protected Package 
 echo -e "$myPass" | sudo -kS sh -c "dnf list --installed | awk {'print $1'} >> /etc/dnf/protected.d/default-pkgs.conf"
 
-#run firejail for default all program
+# #run firejail for default all program
 echo -e "$myPass" |  sudo -kS firecfg
 
-#change default shell
+# #change default shell
 echo "change shell"
 echo -e "$myPass" |  sudo -kS  chsh --shell /bin/zsh $(whoami)
 
